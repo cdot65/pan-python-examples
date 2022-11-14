@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pan-python-examples"
+version = "0.1.0"
+description = "Educational examples of using Python against Palo Alto Networks platforms"
+authors = ["Calvin Remsburg <cremsburg.dev@gmail.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pan-os-python = "^1.7.3"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+flake8 = "^5.0.4"
+invoke = "^1.7.3"
+ipdb = "^0.13.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
