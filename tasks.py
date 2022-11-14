@@ -19,7 +19,7 @@ from invoke import task
 # DOCKER PARAMETERS
 # ---------------------------------------------------------------------------
 DOCKER_IMG = "ghcr.io/cdot65/pan-automation"
-DOCKER_TAG = "0.0.1"
+DOCKER_TAG = "python"
 
 
 # ---------------------------------------------------------------------------
@@ -47,23 +47,23 @@ def shell(context):
     """Get access to the bash shell within our container."""
     context.run(
         f"docker run -it --rm \
-            -v {PWD}/ansible:/home/ansible \
-            -w /home/ansible/ \
+            -v {PWD}/python:/home/python \
+            -w /home/python/ \
             {DOCKER_IMG}:{DOCKER_TAG} /bin/sh",
         pty=True,
     )
 
 
 # ---------------------------------------------------------------------------
-# EXECUTE ANSIBLE PLAYBOOK
+# EXECUTE sip.py PYTHON SCRIPT
 # ---------------------------------------------------------------------------
 @task
-def ansible(context):
+def python(context):
     """Test the playbook by running it within the container."""
     context.run(
         f"docker run -it --rm \
-            -v {PWD}/ansible:/home/ansible \
-            -w /home/ansible/ \
-            {DOCKER_IMG}:{DOCKER_TAG} ansible-playbook hello.yaml",
+            -v {PWD}/python:/home/python \
+            -w /home/python/sip-alg-disable \
+            {DOCKER_IMG}:{DOCKER_TAG} python sip.py",
         pty=True,
     )
