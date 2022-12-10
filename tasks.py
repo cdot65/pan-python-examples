@@ -18,7 +18,7 @@ from invoke import task
 # ---------------------------------------------------------------------------
 # DOCKER PARAMETERS
 # ---------------------------------------------------------------------------
-DOCKER_IMG = "ghcr.io/cdot65/pan-automation"
+DOCKER_IMG = "ghcr.io/cdot65/pan-os-docker"
 DOCKER_TAG = "python"
 
 
@@ -29,22 +29,11 @@ PWD = os.getcwd()
 
 
 # ---------------------------------------------------------------------------
-# DOCKER CONTAINER BUILD
-# ---------------------------------------------------------------------------
-@task
-def build(context):
-    """Build our docker image."""
-    context.run(
-        f"docker build -t {DOCKER_IMG}:{DOCKER_TAG} docker/",
-    )
-
-
-# ---------------------------------------------------------------------------
 # DOCKER CONTAINER SHELL
 # ---------------------------------------------------------------------------
 @task
 def shell(context):
-    """Get access to the bash shell within our container."""
+    """Access the bash shell within our container."""
     context.run(
         f"docker run -it --rm \
             -v {PWD}/python:/home/python \
@@ -55,15 +44,15 @@ def shell(context):
 
 
 # ---------------------------------------------------------------------------
-# EXECUTE sip.py PYTHON SCRIPT
+# PYTHON REPL
 # ---------------------------------------------------------------------------
 @task
 def python(context):
-    """Test the playbook by running it within the container."""
+    """Access the Python REPL within the container."""
     context.run(
         f"docker run -it --rm \
             -v {PWD}/python:/home/python \
-            -w /home/python/sip-alg-disable \
-            {DOCKER_IMG}:{DOCKER_TAG} python sip.py",
+            -w /home/python/ \
+            {DOCKER_IMG}:{DOCKER_TAG} ipython --profile=paloalto",
         pty=True,
     )
