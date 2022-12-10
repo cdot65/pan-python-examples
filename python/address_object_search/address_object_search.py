@@ -1,4 +1,4 @@
-"""Find instances of address objects.
+"""Search for instances of address objects.
 
 This script will locate all instances of an AddressObject within
 the firewall's configuration.
