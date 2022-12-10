@@ -38,6 +38,9 @@ PANPASS = os.environ.get("PANPASS", "mysecretpassword")
 pan = Panorama(PANURL, PANUSER, PANPASS)
 
 
+# ----------------------------------------------------------------------------
+# Function to grab Panorama configuration objects
+# ----------------------------------------------------------------------------
 def grab_config():
     """
     Description: collect configuration objects from Panorama.
@@ -102,6 +105,9 @@ def grab_config():
     return address_groups, address_objects
 
 
+# ----------------------------------------------------------------------------
+# Function to map associations between address objects and their parent groups
+# ----------------------------------------------------------------------------
 def find_associations(address_groups, address_objects, search):
     """
     Description: Find all associations of an address object.
@@ -152,6 +158,9 @@ def find_associations(address_groups, address_objects, search):
         return None
 
 
+# ----------------------------------------------------------------------------
+# Main execution of our script
+# ----------------------------------------------------------------------------
 def main():
     """
     Description: Main execution of our script.
@@ -184,5 +193,8 @@ def main():
         print(f"no match was found for {args.prefix}")
 
 
+# ----------------------------------------------------------------------------
+# Execute main function
+# ----------------------------------------------------------------------------
 if __name__ == "__main__":
     main()
