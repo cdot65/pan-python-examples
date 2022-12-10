@@ -108,7 +108,7 @@ def grab_config():
 # ----------------------------------------------------------------------------
 # Function to map associations between address objects and their parent groups
 # ----------------------------------------------------------------------------
-def find_associations(address_groups, address_objects, search):
+def find_matches(address_groups, address_objects, search):
     """
     Description: Find all associations of an address object.
     Workflow:
@@ -116,7 +116,7 @@ def find_associations(address_groups, address_objects, search):
         2. Use the match's object name to see if it resides in an address_group object.
         3. Repeat for of the address group name to see if it's nested in another group.
     Return:
-        - name: associated_groups
+        - name: associations
           type: list
     """
 
@@ -133,26 +133,26 @@ def find_associations(address_groups, address_objects, search):
     if "name" in match:
 
         # create a placeholder for our potential groups
-        associated_groups = []
+        associations = []
 
         # loop over the address groups
         for each in address_groups:
 
-            # if there is a positive match, then update our associated_groups object
+            # if there is a positive match, then update our associations object
             if match["name"] in each[3]:
-                associated_groups.append(each)
+                associations.append(each)
 
-        # let's finally loop over our associated_groups object to see if a group is nested
-        for each in associated_groups:
+        # let's finally loop over our associations object to see if a group is nested
+        for each in associations:
 
             # loop over our address_groups object again, looking to find a match
             for group in address_groups:
 
                 # append when we see the name of our address group matched in another address group
                 if each[1] in group[3]:
-                    associated_groups.append(group)
+                    associations.append(group)
 
-        return associated_groups
+        return associations
 
     else:
         return None
@@ -167,7 +167,7 @@ def main():
     Workflow:
         1. Retrieve the prefix passed as an argument from the user
         2. Call the `grab_config` function to retrieve configuration objects
-        3. Pass our prefix and lists objects into `find_associations`
+        3. Pass our prefix and lists objects into `find_matches`
         4. Print result to console
     """
     # create instance of argparse, asking for `--prefix` to be passed at run
@@ -182,13 +182,13 @@ def main():
     address_groups, address_objects = grab_config()
 
     # find all associations of the prefix
-    associated_groups = find_associations(address_groups, address_objects, args.prefix)
+    associations = find_matches(address_groups, address_objects, args.prefix)
 
     # determine if the search was successful
-    if associated_groups:
+    if associations:
         # create a pandas dataframe and print to the console.
-        df = pd.DataFrame(associated_groups)
-        print(tabulate(df, headers="keys", tablefmt="psql"))
+        df = pd.DataFrame(associations)
+        print(tabulate(df, headers="keys", tablefmt="fancy_outline"))
     else:
         print(f"no match was found for {args.prefix}")
 
