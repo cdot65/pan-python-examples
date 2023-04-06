@@ -10,8 +10,8 @@ COPY requirements.txt .
 # Install the required Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the script and .env.example into the container
-COPY panorama_rules_export.py .env.example ./
+# Copy the script and .env into the container
+COPY panorama_rules_export.py .env ./
 
 # Set the entrypoint for the container
 ENTRYPOINT ["python", "panorama_rules_export.py"]
