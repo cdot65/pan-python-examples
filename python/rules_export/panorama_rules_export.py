@@ -18,6 +18,7 @@ limitations under the License.
 # standard library imports
 import os
 import csv
+import datetime
 import logging
 from typing import List, Tuple
 
@@ -36,7 +37,12 @@ load_dotenv(".env")
 PANURL = os.environ.get("PANURL", "panorama.lab.com")
 PANUSER = os.environ.get("PANUSER", "automation")
 PANPASS = os.environ.get("PANPASS", "mysecretpassword")
-OUTPUT_FILE = 'panorama_rules.csv'
+
+# ----------------------------------------------------------------------------
+# Load environment variables from .env file
+# ----------------------------------------------------------------------------
+TIMESTAMP = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")  # Add this line
+OUTPUT_FILE = f'output/panorama_rules_{TIMESTAMP}.csv'  # Modify this line
 
 
 # ----------------------------------------------------------------------------
@@ -113,6 +119,8 @@ def get_output_filepath(filename: str) -> str:
     Returns:
         A string representing the output filepath.
     """
+    output_directory = os.path.dirname(filename)  # Add this line
+    os.makedirs(output_directory, exist_ok=True)  # Add this line
     return os.path.join(os.getcwd(), filename)
 
 
