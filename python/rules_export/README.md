@@ -79,7 +79,7 @@ The Panorama Rules Exporter script consists of the following steps:
 
 2. Connect to the Panorama device.
 
-3. Retrieve the security rules and their associated Security Profile Groups.
+3. Retrieve the security rules and their associated Security Profile Groups using the `group` attribute.
 
 4. Save the data to a CSV file.
 
