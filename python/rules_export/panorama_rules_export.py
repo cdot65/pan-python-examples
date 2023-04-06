@@ -18,12 +18,15 @@ limitations under the License.
 # standard library imports
 import os
 import csv
+import logging
+from typing import List, Tuple
 
 # third party library imports
 from dotenv import load_dotenv
 
 # Palo Alto Networks imports
-from panos import panorama, objects
+from panos import panorama
+from panos.policies import PreRulebase, PostRulebase, SecurityRule
 
 
 # ----------------------------------------------------------------------------
@@ -45,7 +48,7 @@ pan = panorama.Panorama(PANURL, PANUSER, PANPASS)
 # ----------------------------------------------------------------------------
 # Function to retrieve security rules and associated Security Profile Groups
 # ----------------------------------------------------------------------------
-def get_security_rules_and_profiles(pan):
+def get_security_rules_and_profiles(pan: panorama.Panorama) -> List[Tuple[str, str]]:
     """
     Retrieve security rules and their associated Security Profile Groups.
 
@@ -56,13 +59,25 @@ def get_security_rules_and_profiles(pan):
         A list of tuples, each containing the rule name and its associated
         Security Profile Group (or 'N/A' if no group is associated).
     """
-    # Retrieve security rules
-    rules = objects.SecurityRule.refreshall(pan)
+    # Create Pre Rulebase and Post Rulebase instances
+    pre_rulebase = PreRulebase()
+    post_rulebase = PostRulebase()
+
+    # Add Pre Rulebase and Post Rulebase to the Panorama instance
+    pan.add(pre_rulebase)
+    pan.add(post_rulebase)
+
+    # Retrieve Pre Rules and Post Rules
+    pre_rules = SecurityRule.refreshall(pre_rulebase)
+    post_rules = SecurityRule.refreshall(post_rulebase)
+
+    # Combine Pre Rules and Post Rules
+    rules = pre_rules + post_rules
 
     # Prepare data
     data = []
     for rule in rules:
-        security_profile_group = rule.profile_setting.group
+        security_profile_group = rule.group
         data.append((rule.name, security_profile_group if security_profile_group else 'N/A'))
 
     return data
@@ -71,7 +86,7 @@ def get_security_rules_and_profiles(pan):
 # ----------------------------------------------------------------------------
 # Function to save data to a CSV file
 # ----------------------------------------------------------------------------
-def save_to_csv(data, filename):
+def save_to_csv(data: List[Tuple[str, str]], filename: str) -> None:
     """
     Save the given data to a CSV file.
 
@@ -86,23 +101,49 @@ def save_to_csv(data, filename):
 
 
 # ----------------------------------------------------------------------------
+# Function to get the output filepath
+# ----------------------------------------------------------------------------
+def get_output_filepath(filename: str) -> str:
+    """
+    Get the output filepath for the given filename.
+
+    Args:
+        filename: The name of the file.
+
+    Returns:
+        A string representing the output filepath.
+    """
+    return os.path.join(os.getcwd(), filename)
+
+
+# ----------------------------------------------------------------------------
+# Configure logging
+# ----------------------------------------------------------------------------
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+
+
+# ----------------------------------------------------------------------------
 # Main execution of our script
 # ----------------------------------------------------------------------------
-def main():
-    """
-    Main execution of the script.
+def main() -> None:
+    try:
+        # Get security rules and associated Security Profile Groups
+        data = get_security_rules_and_profiles(pan)
+    except Exception as e:
+        logging.error(f"Error retrieving security rules: {e}")
+        return
 
-    Workflow:
-        1. Retrieve security rules and their associated Security Profile Groups.
-        2. Save the data to a CSV file.
-    """
-    # Get security rules and associated Security Profile Groups
-    data = get_security_rules_and_profiles(pan)
+    # Get the output filepath
+    output_filepath = get_output_filepath(OUTPUT_FILE)
 
-    # Save the data to a CSV file
-    save_to_csv(data, OUTPUT_FILE)
+    try:
+        # Save the data to a CSV file
+        save_to_csv(data, output_filepath)
+    except Exception as e:
+        logging.error(f"Error saving data to CSV file: {e}")
+        return
 
-    print(f'Exported to {OUTPUT_FILE}')
+    logging.info(f'Exported to {output_filepath}')
 
 
 # ----------------------------------------------------------------------------
