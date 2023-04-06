@@ -10,6 +10,7 @@ This project retrieves a list of security rules from Panorama and their associat
   - [Execution ⚙️](#execution-️)
     - [Run Script Locally 🖥️](#run-script-locally-️)
     - [Run Script with Docker 🐳](#run-script-with-docker-)
+    - [Examle Output 📄](#examle-output-)
   - [Scheduled Execution 📅](#scheduled-execution-)
   - [Technical Deep Dive 🔎](#technical-deep-dive-)
 
@@ -52,6 +53,25 @@ The Panorama Rules Exporter script connects to a Palo Alto Networks Panorama dev
     ```
 
 Replace `/path/to/host/directory` with the path to the directory containing the `.env` file and where you want to save the output CSV file.
+
+### Examle Output 📄
+
+The following is an example of the output CSV file:
+
+| Rule Name                | Security Profile Group |
+| ------------------------ | ---------------------- |
+| Block Quic               | N/A                    |
+| Block Gaming URLs        | ['Outbound']           |
+| AD servers               | N/A                    |
+| Allow DNS                | N/A                    |
+| SSH                      | N/A                    |
+| Network Services         | N/A                    |
+| Active Directory Inbound | N/A                    |
+| k8s api                  | N/A                    |
+| k8s nodeports            | N/A                    |
+| Ansible EDA permit       | N/A                    |
+| LAN Outbound             | ['Outbound']           |
+| DMZ Outbound             | ['Outbound']           |
 
 ## Scheduled Execution 📅
 
