@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pan-python-examples"
+version = "0.1.0"
+description = "Examples of using the \"pan-os-python\" SDK"
+authors = ["Calvin Remsburg <cremsburg.dev@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "pan_python_examples"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pan-os-python = "^1.11.0"
+dynaconf = "^3.2.1"
+xmltodict = "^0.13.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+flake8 = "^6.1.0"
+ipython = "^8.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
