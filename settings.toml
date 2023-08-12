@@ -1,0 +1,56 @@
+api_key = "your api key should be in .secrets.toml file and excluded from git"
+
+[panorama]
+base_url = "192.168.255.210"
+
+[shared]
+dns1 = "94.140.14.14"
+dns2 = "94.140.14.14"
+ntp1 = "0.north-america.pool.ntp.org"
+ntp2 = "1.north-america.pool.ntp.org"
+domain = "redtail.com"
+
+[austin]
+lan = "10.2.1.1/24"
+wlan = "10.2.2.1/24"
+iot = "10.2.3.1/24"
+wan = "74.51.192.8/30"
+lo1 = "10.255.255.2/32"
+rid = "10.255.255.2"
+
+[datacenter]
+lan = "10.1.1.1/24"
+iot = "10.1.2.1/24"
+dmz = "172.16.0.1/24"
+vpn = "192.168.0.1/24"
+wan = "74.51.192.2/30"
+infra = "192.168.255.1/24"
+lo1 = "10.255.255.1/32"
+rid = "10.255.255.1"
+
+[dallas]
+lan = "10.3.1.1/24"
+wlan = "10.3.2.1/24"
+iot = "10.3.3.1/24"
+wan = "74.51.192.6/30"
+lo1 = "10.255.255.3/32"
+rid = "10.255.255.3"
+
+[houston]
+lan = "10.4.1.1/24"
+wlan = "10.4.2.1/24"
+iot = "10.4.3.1/24"
+wan = "74.51.192.4/30"
+lo1 = "10.255.255.4/32"
+rid = "10.255.255.4"
+ha_group = "1"
+ha1_port = "management"
+ha2_port = "ethernet1/2"
+
+[houston.fw1]
+ha1_peer = "192.168.255.212"
+ha2_ip = "172.20.12.1/24"
+
+[houston.fw2]
+ha1_peer = "192.168.255.211"
+ha2_ip = "172.20.12.2/24"
